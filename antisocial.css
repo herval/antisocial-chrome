@@ -1,0 +1,8 @@
+.antisocial-comments-disabled-section {
+  display: none !important;
+}
+
+.antisocial-comments-disabled-blurb {
+  font-size: 6em;
+  text-align: center;
+}
