@@ -1,31 +1,21 @@
 var tabStatuses = {};
 
-var toggleComments = function(tabId, tabData) {
+var toggleComments = function(tabData) {
   if(tabData.commentBlocks === 0) { // no comments to show or hide
-    chrome.pageAction.hide(tabId);
+    chrome.pageAction.hide(tabData.tabId);
   } else if(tabData.hidingComments) {
-    chrome.pageAction.show(tabId);
-    chrome.pageAction.setIcon({ tabId: tabId, path: "icon.png" });
+    chrome.pageAction.show(tabData.tabId);
+    chrome.pageAction.setIcon({ tabId: tabData.tabId, path: "icon.png" });
   } else {
-    chrome.pageAction.show(tabId);
-    chrome.pageAction.setIcon({ tabId: tabId, path: "icon_off.png" });
+    chrome.pageAction.show(tabData.tabId);
+    chrome.pageAction.setIcon({ tabId: tabData.tabId, path: "icon_off.png" });
   }
 };
 
-var handleTabResponse = function(tabId, data) {
-  tabStatuses[tabId] = data;
-  toggleComments(tabId, tabStatuses[tabId]);
-};
-
 var sendMessageToTab = function(tabId, hideComments) {
-  chrome.tabs.sendRequest(
+  chrome.tabs.sendMessage(
     tabId, 
-    { hideComments: hideComments }, 
-    function(response) { 
-      if(response !== undefined) {
-        handleTabResponse(tabId, response);
-      }
-    }
+    { tabId: tabId, hideComments: hideComments }
   );
 }
 
@@ -43,4 +33,9 @@ chrome.pageAction.onClicked.addListener(function(tab) {
 
 chrome.tabs.onRemoved.addListener(function(tabId) {
   delete tabStatuses[tabId];
+});
+
+chrome.runtime.onMessage.addListener(function(data) {
+  tabStatuses[data.tabId] = data;
+  toggleComments(data);
 });

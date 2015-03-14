@@ -1,30 +1,47 @@
 var commentBlockSelectors = "#fbComments, #disqus_thread, #comments, .comments-iframe-container";
+var blurbClass = "antisocial-comments-disabled-blurb";
+var hideCss = "antisocial-comments-disabled-section";
+var hidingComments = true;
+var tabId;
 
 if (window == top) {
 
   var hideComments = function() {
-    console.log("Anti-Social: Hiding comments...");
-    $("<div>").html("🙈🙉🙊").addClass("antisocial-comments-disabled-blurb").insertBefore($(commentBlockSelectors));
-    $(commentBlockSelectors).addClass("antisocial-comments-disabled-section");
+    var commentBlocks = $(commentBlockSelectors).not("." + hideCss);
+    var blurb = $("<div>").html("🙈🙉🙊").addClass(blurbClass);
+    blurb.insertBefore(commentBlocks);
+    commentBlocks.addClass(hideCss);
   };
 
   var showComments = function() {
-    console.log("Anti-Social: Showing comments...");
-    $(".antisocial-comments-disabled-blurb").remove();
-    $(commentBlockSelectors).removeClass("antisocial-comments-disabled-section");
+    $("." + blurbClass).remove();
+    $("." + hideCss).removeClass(hideCss);
   };
 
-  chrome.extension.onRequest.addListener(function(req, sender, callback) {
-    var found = $(commentBlockSelectors);
-    callback({ 
-      commentBlocks: found.length, 
-      hidingComments: req.hideComments
+  var hideOrShow = function() {
+    chrome.runtime.sendMessage({ 
+      tabId: tabId,
+      commentBlocks: $(commentBlockSelectors).length,
+      hidingComments: hidingComments
     });
 
-    if(req.hideComments) {
+    if(hidingComments) {
       hideComments();
     } else {
       showComments();
-    }
+    }    
+  }
+
+  chrome.runtime.onMessage.addListener(function(req, sender, callback) {
+    hidingComments = req.hideComments;
+    tabId = req.tabId;
+
+    hideOrShow();
+
+    // hide things inserted *after* the page loaded
+    $('body').on('DOMNodeInserted', commentBlockSelectors, function(e) {
+      hideOrShow();
+    });
+
   });
 }
