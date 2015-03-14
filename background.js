@@ -1,5 +1,3 @@
-var commentBlockSelectors = "#fbComments, #disqus_thread, #comments, .comments-iframe-container";
-
 var tabStatuses = {};
 
 var toggleComments = function(tabId, tabData) {
@@ -22,7 +20,7 @@ var handleTabResponse = function(tabId, data) {
 var sendMessageToTab = function(tabId, hideComments) {
   chrome.tabs.sendRequest(
     tabId, 
-    { hideComments: hideComments, selectors: commentBlockSelectors }, 
+    { hideComments: hideComments }, 
     function(response) { 
       if(response !== undefined) {
         handleTabResponse(tabId, response);

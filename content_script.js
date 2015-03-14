@@ -1,21 +1,21 @@
+var commentBlockSelectors = "#fbComments, #disqus_thread, #comments, .comments-iframe-container";
+
 if (window == top) {
-  var selectors;
 
   var hideComments = function() {
     console.log("Anti-Social: Hiding comments...");
-    $("<div>").html("🙈🙉🙊").addClass("antisocial-comments-disabled-blurb").insertBefore($(selectors));
-    $(selectors).addClass("antisocial-comments-disabled-section");
+    $("<div>").html("🙈🙉🙊").addClass("antisocial-comments-disabled-blurb").insertBefore($(commentBlockSelectors));
+    $(commentBlockSelectors).addClass("antisocial-comments-disabled-section");
   };
 
   var showComments = function() {
     console.log("Anti-Social: Showing comments...");
     $(".antisocial-comments-disabled-blurb").remove();
-    $(selectors).removeClass("antisocial-comments-disabled-section");
+    $(commentBlockSelectors).removeClass("antisocial-comments-disabled-section");
   };
 
   chrome.extension.onRequest.addListener(function(req, sender, callback) {
-    selectors = req.selectors;
-    var found = $(req.selectors);
+    var found = $(commentBlockSelectors);
     callback({ 
       commentBlocks: found.length, 
       hidingComments: req.hideComments
