@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <script src="../jquery-1.11.2.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        console.log("Loading more comments in 2 seconds...");
+        setTimeout(function() {
+          $("body").append($("<div id='fbComments'>"));
+        }, 2000);
+      });
+    </script>
+  </head>
+
+
+  <body>
+
+    <div id="comments">yada yada yada</div>
+
+    <a href="without_comments.html">page without comments</a>
+
+  </body>
+
+</html>
