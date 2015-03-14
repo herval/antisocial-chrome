@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Anti-Social - see no Trolls, hear no Trolls, be no Troll",
-  "description": "This extension hides comments sections on sites and blogs, leaving you free to read the content that matters to you without accidentally ruining your day with Trolls (or worse: inviting your dark side for an Internet discussion)",
+  "name": "Anti-Social - hide all the comments!",
+  "description": "Hide comment sections on sites and blogs. Read the content that matters to you without accidentally ruining your day with Trolls.",
   "version": "1.0",
   "icons": {
     "128": "icon.png"
